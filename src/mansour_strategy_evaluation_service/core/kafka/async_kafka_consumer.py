@@ -1,8 +1,11 @@
+import logging
 from aiokafka import AIOKafkaConsumer
 from typing import Callable
 import json
 
 from mansour_strategy_evaluation_service.config.env_settings import env
+
+logger = logging.getLogger(__name__)
 
 class AsyncKafkaConsumer:
     def __init__(self, topics: list[str]):
@@ -20,7 +23,7 @@ class AsyncKafkaConsumer:
         )
         
         await self.consumer.start()
-        print(f"🎧 Started consuming from {self.topics}")
+        logger.info(f"🎧 Started consuming from {self.topics}")
         
         try:
             async for message in self.consumer:
@@ -31,4 +34,4 @@ class AsyncKafkaConsumer:
     async def stop(self):
         if self.consumer:
             await self.consumer.stop()
-            print(f"✅ Consumer '{self.topics}' stopped")
+            logger.info(f"✅ Consumer '{self.topics}' stopped")

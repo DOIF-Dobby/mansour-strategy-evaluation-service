@@ -1,16 +1,19 @@
 from dataclasses import dataclass
 import json
+import logging
 from typing import Dict
 from mansour_strategy_evaluation_service.core.kafka.base_consumer import BaseConsumer
 from mansour_strategy_evaluation_service.model.user_strategy_payload import UserStrategyActivatedEventPayload, UserStrategyDeactivatedEventPayload
 from mansour_strategy_evaluation_service.service.watchlist_service import watchlist_service
+
+logger = logging.getLogger(__name__)
 
 class UserStrategyActivatedEventConsumer(BaseConsumer):
     TOPIC = "outbox.event.UserStrategy.UserStrategyActivatedEvent"
 
     def __init__(self):
         super().__init__()
-        print("UserStrategyEventConsumer initialized.")
+        logger.info("UserStrategyActivatedEventConsumer initialized.")
 
     async def handle(self, message):
         try:
@@ -22,7 +25,7 @@ class UserStrategyActivatedEventConsumer(BaseConsumer):
             )
 
         except Exception as e:
-            print(f"🔥 Error processing message in UserStrategyEventConsumer: {e}")
+            logger.error(f"🔥 Error processing message in UserStrategyActivatedEventConsumer: {e}")
 
 
 class UserStrategyDeactivatedEventConsumer(BaseConsumer):
@@ -30,7 +33,7 @@ class UserStrategyDeactivatedEventConsumer(BaseConsumer):
 
     def __init__(self):
         super().__init__()
-        print("UserStrategyDeactivatedEventConsumer initialized.")
+        logger.info("UserStrategyDeactivatedEventConsumer initialized.")
 
     async def handle(self, message):
         try:
@@ -44,4 +47,4 @@ class UserStrategyDeactivatedEventConsumer(BaseConsumer):
             )
 
         except Exception as e:
-            print(f"🔥 Error processing deactivation message: {e}")
+            logger.error(f"🔥 Error processing deactivation message: {e}")

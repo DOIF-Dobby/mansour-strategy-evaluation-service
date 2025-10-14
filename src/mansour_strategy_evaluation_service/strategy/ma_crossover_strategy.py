@@ -1,8 +1,11 @@
+import logging
 from typing import List
 from mansour_strategy_evaluation_service.model.candle import Candle
 from mansour_strategy_evaluation_service.strategy.base_strategy import Signal, TradingStrategy
 import pandas as pd
 import talib
+
+logger = logging.getLogger(__name__)
 
 
 class MovingAverageCrossoverStrategy(TradingStrategy):
@@ -36,17 +39,17 @@ class MovingAverageCrossoverStrategy(TradingStrategy):
         previous_long_ma = long_ma.iloc[-2]
         current_long_ma = long_ma.iloc[-1]
 
-        print(f"previous_short_ma: {previous_short_ma}")
-        print(f"current_short_ma: {current_short_ma}")
-        print(f"previous_long_ma: {previous_long_ma}")
-        print(f"current_long_ma: {current_long_ma}")
+        logger.info(f"previous_short_ma: {previous_short_ma}")
+        logger.info(f"current_short_ma: {current_short_ma}")
+        logger.info(f"previous_long_ma: {previous_long_ma}")
+        logger.info(f"current_long_ma: {current_long_ma}")
         
         # 4. 골든크로스 / 데드크로스를 판단합니다.
         is_golden_cross = previous_short_ma <= previous_long_ma and current_short_ma > current_long_ma
         is_dead_cross = previous_short_ma >= previous_long_ma and current_short_ma < current_long_ma
 
-        print(f"is_golden_cross: {is_golden_cross}")
-        print(f"is_dead_cross: {is_dead_cross}")
+        logger.info(f"is_golden_cross: {is_golden_cross}")
+        logger.info(f"is_dead_cross: {is_dead_cross}")
 
         if is_golden_cross:
             return Signal.BUY

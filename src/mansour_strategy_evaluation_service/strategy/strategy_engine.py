@@ -1,13 +1,16 @@
+import logging
 from mansour_strategy_evaluation_service.client.market_history_client import MarketHistoryClient, market_history_client
 from mansour_strategy_evaluation_service.model.one_minute_candle import OneMinuteCandle
 from mansour_strategy_evaluation_service.strategy.base_strategy import Signal, TradingStrategy
+
+logger = logging.getLogger(__name__)
 
 
 class StrategyEngine:
     def __init__(self, history_client: MarketHistoryClient):
         self.history_client = history_client
         self.strategies = {cls().get_name(): cls() for cls in TradingStrategy.__subclasses__()}
-        print(f"✅ Registered strategies: {list(self.strategies.keys())}")
+        logger.info(f"✅ Registered strategies: {list(self.strategies.keys())}")
 
     async def evaluate(self, strategy_details: dict, current_candle: OneMinuteCandle) -> Signal:
         """

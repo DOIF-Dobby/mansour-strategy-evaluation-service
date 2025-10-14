@@ -1,6 +1,9 @@
+import logging
 import py_eureka_client.eureka_client as eureka_client
 from typing import Optional
 import socket
+
+logger = logging.getLogger(__name__)
 
 class EurekaConfig:
     def __init__(
@@ -42,4 +45,4 @@ class EurekaConfig:
             # 만료 시간 (초)
             duration_in_secs=90
         )
-        print(f"✅ Registered to Eureka: {self.app_name} at {self.instance_host}:{self.instance_port}")
+        logger.info(f"✅ Registered to Eureka: {self.app_name} at {self.instance_host}:{self.instance_port}")

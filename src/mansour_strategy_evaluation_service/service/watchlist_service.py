@@ -1,5 +1,8 @@
+import logging
 from mansour_strategy_evaluation_service.model.user_strategy_payload import UserStrategyActivatedEventPayload
 from mansour_strategy_evaluation_service.repository.watchlist_repository import WatchlistRepository, watchlist_repository
+
+logger = logging.getLogger(__name__)
 
 class WatchlistService:
     def __init__(self, repository: WatchlistRepository):
@@ -24,7 +27,7 @@ class WatchlistService:
             
             # 이 전략이 이 종목의 첫 번째 평가자라면, 활성 감시 목록에 추가
             if evaluator_count == 1:
-                print(f"🌟 First evaluator for {symbol}. Adding to active watchlist.")
+                logger.info(f"🌟 First evaluator for {symbol}. Adding to active watchlist.")
                 self.repo.add_to_active_watchlist(symbol)
 
     def deactivate_strategy_for_symbol(self, symbol: str, user_strategy_id: int):
@@ -43,7 +46,7 @@ class WatchlistService:
             
             # 이 전략이 이 종목의 마지막 평가자였다면, 활성 감시 목록에서 제거
             if evaluator_count == 0:
-                print(f"👋 Last evaluator for {symbol}. Removing from active watchlist.")
+                logger.info(f"👋 Last evaluator for {symbol}. Removing from active watchlist.")
                 self.repo.remove_from_active_watchlist(symbol)
 
 # Service 인스턴스를 미리 생성

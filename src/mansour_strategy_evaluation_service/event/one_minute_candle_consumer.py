@@ -1,19 +1,22 @@
+import logging
 from datetime import datetime
 from decimal import Decimal
 from mansour_strategy_evaluation_service.core.kafka.base_consumer import BaseConsumer
 from mansour_strategy_evaluation_service.model.one_minute_candle import OneMinuteCandle
 from mansour_strategy_evaluation_service.service.evaluation_coordinator import evaluation_coordinator
 
+logger = logging.getLogger(__name__)
+
 class OneMinuteCandleConsumer(BaseConsumer):
     TOPIC = "marketdata.candles.1m"
 
     def __init__(self):
         super().__init__()
-        print("OneMinuteCandleConsumer initialized.")
+        logger.info("OneMinuteCandleConsumer initialized.")
 
     async def handle(self, message):
         try:
-            print(f"message.value: {message.value}")
+            logger.debug(f"message.value: {message.value}")
             
             data_dict = message.value
 
@@ -28,9 +31,9 @@ class OneMinuteCandleConsumer(BaseConsumer):
                 windowEndTime=datetime.fromtimestamp(data_dict['windowEndTime'])
             )
 
-            print(f"🕯️ Successfully parsed candle: {candle}")
+            logger.info(f"🕯️ Successfully parsed candle: {candle}")
 
             await evaluation_coordinator.process_candle(candle)
 
         except Exception as e:
-            print(f"🔥 Error processing message in UserStrategyEventConsumer: {e}")
+            logger.error(f"🔥 Error processing message in OneMinuteCandleConsumer: {e}")
