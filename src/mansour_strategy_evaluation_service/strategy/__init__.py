@@ -1,0 +1,1 @@
+from mansour_strategy_evaluation_service.strategy.ma_crossover_strategy import MovingAverageCrossoverStrategy
